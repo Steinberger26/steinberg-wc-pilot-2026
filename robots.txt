@@ -1,2 +1,4 @@
+# Diese Seite soll nicht von Suchmaschinen indexiert werden.
+# (Interne Schul-Anwendung, keine öffentlichen Inhalte)
 User-agent: *
 Disallow: /

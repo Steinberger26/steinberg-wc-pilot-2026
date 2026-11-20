@@ -1,0 +1,11 @@
+{
+    "name": "Toiletten-Pass",
+    "short_name": "WC-Pass",
+    "description": "Pseudonymes Toiletten-Abmeldesystem für Klassenzimmer",
+    "start_url": "./toiletten_terminal.html",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "any",
+    "background_color": "#f8fafc",
+    "theme_color": "#1e3a8a"
+}
