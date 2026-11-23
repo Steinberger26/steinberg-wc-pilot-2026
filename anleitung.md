@@ -19,6 +19,11 @@ Diese Anleitung erklärt die Benutzung in zwei Teilen:
 Das iPad hängt oder steht in der Nähe der Klassenzimmer-Tür. Es zeigt immer,
 wer gerade auf der Toilette ist.
 
+> **Tipp:** Die QR-Karten sind **klassenspezifisch** – auf jeder Karte
+> steht der Klassenname und der QR-Code enthält die Klassenkennung
+> (z. B. `2B-05`). Scannt ein Kind versehentlich eine Karte aus einer
+> anderen Klasse, erscheint eine Warnung und es wird nichts gebucht.
+
 ### Wenn du rausgehst ( Toilette besuchen )
 
 1. Nimm dein **Federmäppchen** – darauf klebt dein persönlicher QR-Code.
@@ -73,7 +78,7 @@ gespeichert – nur Nummern von 01 bis 30.
 
 | Button | Wofür? | Wann benutzt man ihn? |
 | :--- | :--- | :--- |
-| **QR-Karten drucken** | Erstellt einen Druckbogen mit 30 QR-Kärtchen (Nummer + Code). | Nur beim Schuljahresbeginn oder wenn Karten verloren gehen. Kärtchen ausschneiden, laminieren, auf Federmäppchen kleben. |
+| **QR-Karten drucken** | Erstellt einen Druckbogen mit 30 QR-Kärtchen (Klassenname + Nummer + Code `KLASSENCODE-NR`, z. B. `2B-05`). | Nur beim Schuljahresbeginn oder wenn Karten verloren gehen. Kärtchen ausschneiden, laminieren, auf Federmäppchen kleben. **Achtung:** Nach dem Ändern des Klassennamens müssen die Karten neu gedruckt werden. |
 | **Sammel-QR für Admin** | Zeigt einen großen QR-Code mit **allen gespeicherten Toilettengängen** dieser Klasse – inklusive Datum, auch vergangener Tage. | Wenn die Schulleitung eine Gesamtübersicht über alle Klassen braucht (z. B. nach einem Vorfall). |
 | **Schadens-Zeitfilter** | Filtert die heutigen Gänge nach einem **Zeitfenster**. | Wenn z. B. um 11:20 Uhr ein Papierkorb verstopft gefunden wird: Von–Bis-Zeit eingeben, und die App listet, welche Nummern in dieser Zeit draußen waren. |
 | **Tagesdaten schreddern** | Löscht **alle** heutigen Zeitstempel sofort und unwiderruflich. | Am Ende des Schultags, wenn es **keine** Toilettenschäden gab. Datensparsamkeit: So wenig Daten wie möglich aufbewahren. |
@@ -99,9 +104,12 @@ Zeigt live, wer draußen ist:
 * Der Button **„Zurück"** an der Karte meldet das Kind per Hand zurück
   (falls die Karte vergessen wurde oder der Scan nicht klappt)
 
-### Die Schnell-Tippfeld-Buttons (01–30)
+### Schnell-Tippfeld (01–30) – nur bei Bedarf einblendbar
 
-* Links im Terminal: 30 Tasten für die Nummern.
+* Das Nummernfeld ist **standardmäßig eingeklappt**, damit Kinder nicht
+  versehentlich eine falsche Nummer antippen.
+* Per Klick auf **„Einblenden"** öffnet die Lehrkraft das Feld mit den
+  Tasten 01–30.
 * Tasten von **abwesenden** Kindern leuchten gelb und pulsieren.
 * Ein Tipp auf die Nummer wirkt wie ein Scan (Abgang bzw. Rückkehr).
 * Nützlich, wenn ein Kind seine Karte vergessen hat.
@@ -150,7 +158,8 @@ In `toiletten_terminal.html` gibt es zwei markierte Stellen:
 | Stelle | Was ändert man? |
 | :--- | :--- |
 | Ganz oben im `<style>`-Bereich, Kommentar `HIER HINTERGRUNDFARBE ÄNDERN` | Die Hintergrundfarbe des Terminals (z. B. `#ffffff` für Weiß). |
-| Im `<script>`-Block, Kommentar `HIER KANNST DU DIE APP LEICHT ANPASSEN` | `WARN_AFTER_MINUTES` (Warnton ab X Minuten, Standard 5) und `OVERDUE_MINUTES` (roter Hinweis ab X Minuten, Standard 10) sowie `TOTAL_STUDENTS` (Anzahl Nummern, Standard 30). |
+| Im `<script>`-Block, Kommentar `HIER KANNST DU DIE APP LEICHT ANPASSEN` | `SCHOOL_NAME` (Schulname für Header, Druckbogen & Admin-QR), `ALLOWED_DOMAIN` (Domain-Sperre), `WARN_AFTER_MINUTES` (Warnton ab X Minuten, Standard 5), `OVERDUE_MINUTES` (roter Hinweis ab X Minuten, Standard 10) sowie `TOTAL_STUDENTS` (Anzahl Nummern, Standard 30). |
+| Datei `schul-logo.png` im selben Ordner | Optionales Schul-Logo im Header. Fehlt die Datei, erscheint das 🚻-Symbol als Platzhalter. |
 
 Nach dem Speichern der Datei muss sie nur noch auf den Schulserver
 hochgeladen werden – die iPads laden die neue Version automatisch beim

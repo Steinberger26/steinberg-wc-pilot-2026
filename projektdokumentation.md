@@ -10,11 +10,11 @@
    * 2.2 Schutzfunktion: Zweites Kind nur mit Lehrer-Bestätigung
    * 2.3 Nachmittags in der OGS
 3. **Was steckt technisch drin? (Programmiersprachen & Aufbau)**
-   * 3.1 Warum reicht eine einzige HTML-Datei?
+   * 3.1 Warum reicht je eine HTML-Datei pro Gerät?
    * 3.2 Eingesetzte Sprachen und Bibliotheken
    * 3.3 Wie und wo werden Daten gespeichert?
 4. **Alle Funktionen im Detail**
-   * 4.1 Die Frontkamera als QR-Scanner
+   * 4.1 Die Kamera als QR-Scanner
    * 4.2 Akustische Töne und optische Signale
    * 4.3 Das 30er-Tippfeld (Touch-Alternative)
    * 4.4 Live-Timer und die 10-Minuten-Erinnerung
@@ -74,7 +74,7 @@ Das iPad steht auf einem kleinen Pult oder einem Tisch nahe der Ausgangstür des
 
 ### 2.1 Der normale Ablauf für die Kinder
 1. **Rausgehen (Check-Out):**  
-   Das Kind nimmt sein Federmäppchen, hält den aufgeklebten QR-Code kurz vor die Frontkamera des iPads. Das Gerät spielt einen kurzen, freundlichen Zweiklang ab, das Display zeigt groß: *„Nr. 14 abgemeldet – 10:14 Uhr“*. Das Kind geht zur Toilette.
+   Das Kind nimmt sein Federmäppchen, hält den aufgeklebten QR-Code kurz vor die Kamera des iPads. Das Gerät spielt einen kurzen, freundlichen Zweiklang ab, das Display zeigt groß: *„Nr. 14 abgemeldet – 10:14 Uhr“*. Das Kind geht zur Toilette.
 2. **Wiederkommen (Check-In):**  
    Nach der Rückkehr hält das Kind die Karte erneut vor die Kamera. Ein tieferer Bestätigungston ertönt, und das Display meldet: *„Nr. 14 wieder da (Dauer: 4 Minuten)“*. Der Gang ist erledigt.
 
@@ -96,10 +96,10 @@ Am Nachmittag bewegen sich die Kinder oft frei zwischen Räumen. Hier wird keine
 
 ## 3. Was steckt technisch drin? (Programmiersprachen & Aufbau)
 
-Obwohl die App viele Aufgaben übernimmt (Kamera-Erkennung, Töne, Live-Timer, Druckvorschau, Schadensfilter), steckt die gesamte Programmierlogik des Terminals in **einer einzigen HTML-Datei: `toiletten_terminal.html`**. Daneben liegen nur noch **Bibliotheks-Dateien** (`tailwind.js`, `qrcode.min.js`, `html5-qrcode.min.js`), der **Offline-Cache** (`sw.js`), das **App-Manifest** (`manifest.webmanifest`) und die Admin-Datei `admin_sync.html` im selben Ordner – allesamt fertige, nicht selbst programmierte Bausteine.
+Obwohl die App viele Aufgaben übernimmt (Kamera-Erkennung, Töne, Live-Timer, Druckvorschau, Schadensfilter), steckt die gesamte Programmierlogik des Terminals in **einer einzigen HTML-Datei: `toiletten_terminal.html`**. Das Projekt besteht aus **zwei selbst programmierten HTML-Dateien** – das Klassen-Terminal und `admin_sync.html` für die Schulleitung (liest die Sammel-QRs der Klassen aus). Daneben liegen nur noch **Bibliotheks-Dateien** (`tailwind.js`, `qrcode.min.js`, `html5-qrcode.min.js`), der **Offline-Cache** (`sw.js`), das **App-Manifest** (`manifest.webmanifest`) und `robots.txt` im selben Ordner – allesamt fertige, nicht selbst programmierte Bausteine.
 
-### 3.1 Warum reicht eine einzige HTML-Datei?
-Moderne Web-Browser auf dem iPad (Safari) sind vollwertige Anwendungsplattformen. Eine HTML-Datei kann neben Text auch Gestaltungsvorschriften (CSS), Programmlogik (JavaScript), Töne und Bildverarbeitung direkt in sich vereinen. Es wird keine Installation aus dem Apple App Store benötigt und kein Datenbank-Server im Hintergrund.
+### 3.1 Warum reicht je eine HTML-Datei pro Gerät?
+Moderne Web-Browser auf dem iPad (Safari) sind vollwertige Anwendungsplattformen. Eine HTML-Datei kann neben Text auch Gestaltungsvorschriften (CSS), Programmlogik (JavaScript), Töne und Bildverarbeitung direkt in sich vereinen. Es wird keine Installation aus dem Apple App Store benötigt und kein Datenbank-Server im Hintergrund. Das Terminal (`toiletten_terminal.html`) läuft auf **jedem** Klassen-iPad – derselbe File, aber jeder Browser speichert seine Daten getrennt (`localStorage`). Die zweite Datei (`admin_sync.html`) wird nur auf dem Gerät der Schulleitung geöffnet und dient ausschließlich dem Auslesen der optisch übertragenen Sammel-QRs.
 
 ### 3.2 Eingesetzte Sprachen und Bibliotheken
 Alle verwendeten Technologien sind lizenzkostenfrei (Open Source) und erfordern keine Abonnements:
@@ -109,7 +109,7 @@ Alle verwendeten Technologien sind lizenzkostenfrei (Open Source) und erfordern 
 | **Grundgerüst** | **HTML5** | Erstellt die Struktur: Buttons, Listen, Tabellen, Videofenster und Eingabefelder. |
 | **Design & Farben** | **Tailwind CSS** (`tailwind.js`, lokal) | Sorgt für das moderne, saubere Aussehen mit abgerundeten Karten, Schatten und gut lesbarer Schrift. |
 | **Programmlogik** | **JavaScript (ES6+)** | Berechnet Zeiten, prüft ob jemand draußen ist, reagiert auf Klicks und steuert den Ablauf. |
-| **Kamera & Scan** | **Html5-QRCode** (`html5-qrcode.min.js`, lokal) | Erkennt QR-Codes über die iPad-Frontkamera direkt im Arbeitsspeicher des Geräts (kein Bild verlässt das iPad). |
+| **Kamera & Scan** | **Html5-QRCode** (`html5-qrcode.min.js`, lokal) | Erkennt QR-Codes über die iPad-Kamera (bevorzugt die **hintere** Kamera) direkt im Arbeitsspeicher des Geräts (kein Bild verlässt das iPad). |
 | **QR-Code-Erzeugung** | **QRCode.js** (`qrcode.min.js`, lokal) | Zeichnet die scharfen QR-Codes für den Druckbogen sowie den Sammel-Code für den Admin-Abruf. |
 | **Töne & Signalton** | **Web Audio API** | Erzeugt Töne rein rechnerisch über den Lautsprecher – ganz ohne MP3-Dateien herunterladen zu müssen. |
 | **Offline-Fähigkeit** | **Service Worker** (`sw.js`) | Legt App + alle Bibliotheken im Browser-Cache ab. Nach dem ersten Laden mit Netz funktioniert alles **auch bei komplettem WLAN-Ausfall**. |
@@ -127,18 +127,21 @@ Die App nutzt den standardisierten Browser-Speicher **`localStorage`**:
 
 ## 4. Alle Funktionen im Detail
 
-### 4.1 Die Frontkamera als QR-Scanner
-Über den Button *„📷 Kamera starten“* aktiviert die App die Frontkamera. Im Display erscheint ein dezenter Zielrahmen. Sobald eine Schülerkarte in die Nähe gehalten wird:
+### 4.1 Die Kamera als QR-Scanner
+Über den Button *„📷 Kamera starten“* aktiviert die App die Kamera – **bevorzugt die hintere Kamera** (`environment`, höhere Auflösung und besserer Fokus auf QR-Codes), mit automatischem Fallback auf die Frontkamera (`user`). Im Display erscheint ein dezenter Zielrahmen. Sobald eine Schülerkarte in die Nähe gehalten wird:
 * Erkennt die Software den Code in Bruchteilen einer Sekunde.
 * Ein Schutzfilter (2,5 Sekunden Sperre) verhindert, dass eine Karte versehentlich doppelt gescannt wird.
+* **Klassenprüfung:** Die QR-Codes enthalten eine **Klassenkennung** (z. B. `2B-05` für „Klasse 2b", Nr. 05). Scannt ein Kind eine Karte, die zu einer anderen Klasse gehört, erscheint eine **Warnung** („Karte gehört zu einer anderen Klasse") und es wird **kein Eintrag** erstellt. So können die Nummern 01–30 sauber pro Klasse getrennt bleiben. Karten mit nur der Nummer (`05`) – z. B. von Hand nachgedruckt – werden weiterhin akzeptiert.
 
 ### 4.2 Akustische Töne und optische Signale
 * **Aufbruch:** Ein heller Zweiklang (wie an der Kasse oder am Bahnhof) bestätigt, dass der Gang gebucht ist. Das Banner leuchtet gelb.
 * **Rückkehr:** Ein tieferer, satter Bestätigungston signalisiert die erfolgreiche Rückkehr. Das Banner leuchtet grün.
 * **Warnung:** Bei unberechtigtem Scan oder wenn bereits jemand draußen ist, ertönt ein dezenter Warnton.
+* **Großes Bildschirm-Symbol:** Bei jedem Scan **und** bei manueller Nummerneingabe erscheint zusätzlich ca. 1,6 Sekunden lang ein großes Symbol in der Bildschirmmitte – 🚪 „Raus!" (amber) beim Abgang, ↩️ „Zurück!" (grün) bei der Rückkehr, ⚠️ „Moment!" (rot) bei Warnungen. So sehen auch Kinder aus größerer Entfernung sofort, ob der Scan geklappt hat.
 
 ### 4.3 Das 30er-Tippfeld (Touch-Alternative)
-Auf der linken Seite befindet sich ein Nummernfeld mit den Tasten `01` bis `30`:
+Unter dem Scan-Terminal befindet sich ein einklappbares Nummernfeld mit den Tasten `01` bis `30`:
+* **Standardmäßig ausgeblendet** – Kinder sollen nicht versehentlich eine falsche Nummer antippen. Die Lehrkraft blendet es bei Bedarf per Klick auf *„Einblenden"* ein.
 * Hat ein Kind seine Karte vergessen oder ist sie verknickt, tippt die Lehrkraft oder das Kind einfach auf seine Nummer.
 * Tasten von Kindern, die gerade draußen sind, leuchten gelb auf und pulsieren leicht. So sieht man auf einen Blick, wer unterwegs ist.
 
@@ -151,9 +154,11 @@ In der rechten Spalte listet das Terminal alle Kinder auf, die aktuell den Raum 
 
 ### 4.5 Der integrierte Druckbogen für QR-Karten
 Ein Klick auf *„QR-Karten drucken“* öffnet eine fertige Vorlage für 30 Kärtchen:
-* Jedes Kärtchen enthält die Nummer (z. B. `ID: 04`), einen scharfen QR-Code und den Vermerk *„Streng pseudonym – keine Namen notieren“*.
+* Jedes Kärtchen enthält die **Klasse** (z. B. „Klasse 2b"), die Nummer (`ID: 04`), einen scharfen QR-Code im Format `KLASSENCODE-Nummer` (z. B. `2B-04`) und den Vermerk *„Streng pseudonym – keine Namen notieren“*. Der **Schulname** steht zusätzlich im Kopf des Druckbogens.
+* Im Header der App erscheint der Schulname (`SCHOOL_NAME`) sowie optional das Schul-Logo (`schul-logo.png` – fehlt die Datei, erscheint der „WC"-Platzhalter).
 * Über den Button *„Jetzt Drucken“* wird die Seite sauber auf DIN-A4 formatiert an den Schul-Drucker gesendet.
 * Die Kärtchen werden ausgeschnitten, laminiert und auf das Federmäppchen geklebt.
+* **Wichtig:** Der Klassencode im QR wird aus dem aktuellen Klassennamen abgeleitet (z. B. „Klasse 2b" → `2B`). Wird die Klasse später umbenannt, müssen die Karten neu gedruckt werden – sonst werden sie als „fremde Klasse" abgelehnt.
 
 ### 4.6 Der Schadens-Zeitfilter
 Wird um 11:20 Uhr festgestellt, dass auf der Toilette ein Papierkorb angezündet oder ein Waschbecken verstopft wurde:
@@ -256,6 +261,7 @@ Dieser Abschnitt erklärt die Technik so, dass auch Menschen ohne Programmierken
 | **`tailwind.js`, `qrcode.min.js`, `html5-qrcode.min.js`** | (automatisch geladen) | Fertige Open-Source-Bibliotheken – bewusst **lokal** gespeichert, damit die App auch ohne Internet funktioniert. |
 | **`sw.js`** | (automatisch im Hintergrund) | Service Worker: Cached alle Dateien im Gerät, damit die App ab dem zweiten Laden komplett offline läuft. |
 | **`manifest.webmanifest`** | (optional) | declaring den „App-Namen" für den Jamf-Webclip (WC-Pass / WC-Admin). |
+| **`schul-logo.png`** | (optional) | Schul-Logo im Header. Fehlt die Datei, erscheint automatisch das 🚻-Symbol als Platzhalter. |
 
 **Wichtig:** Alle Dateien müssen **im selben Ordner** auf dem Schulserver liegen, sonst findet der Browser die Bibliotheken und den Service Worker nicht.
 
@@ -321,7 +327,7 @@ INITIALISIERUNG         →DOMContentLoaded: was beim Öffnen der Seite passiert
 SCAN-LOGIK              → processNumberScan(), executeCheckout(), Lehrer-Bestätigung
 FEEDBACK BANNER         → showFeedback(): das gelbe/grüne Meldungsfenster
 RENDERING               → renderAll() und Helfer: baut die Listen & Buttons neu
-KAMERA-MODUS            → toggleCameraView(): startet/stoppt die Frontkamera
+KAMERA-MODUS            → toggleCameraView(): startet/stoppt die Kamera
 SAMMEL-QR FÜR ADMIN     → openAdminSyncModal(): packt den Tag in einen QR-Code
 SCHADENS-ZEITFILTER     → runInvestigationFilter(): vergleicht Zeitfenster mit Gängen
 TAGESDATEN SCHREDDERN   → confirmShredData(): löscht alles
@@ -332,15 +338,18 @@ QR-CODE-DRUCKBOGEN      → generateQrCards(): erzeugt 30 Kärtchen-Vorschauen
 
 | Funktion | Was sie macht (in Laiensprache) |
 | :--- | :--- |
-| `processNumberScan(rawVal)` | **Das Herzstück.** Nimmt eine gescannte oder getippte Nummer entgegen und entscheidet: Ist das Kind schon draußen? → **Check-in** (Rückkehr). Ist es drinnen? → **Check-out** (Abgang) – oder, falls schon ein Kind draußen ist, die **Lehrer-Bestätigung** öffnen. |
+| `processNumberScan(rawVal)` | **Das Herzstück.** Nimmt eine gescannte oder getippte Nummer entgegen und entscheidet: Ist das Kind schon draußen? → **Check-in** (Rückkehr). Ist es drinnen? → **Check-out** (Abgang) – oder, falls schon ein Kind draußen ist, die **Lehrer-Bestätigung** öffnen. Prüft vorher per `parseScanInput()`, ob die Karte zur richtigen Klasse gehört. |
+| `toClassToken(str)` / `getClassToken()` | Wandelt den Klassennamen in einen kurzen Code um („Klasse 2b" → `2B`) – dieser steht im QR-Code der Karten. |
+| `parseScanInput(raw)` | Zerlegt einen Scan in Nummer + Klassenkennung (`2B-05` → Nummer `05`, Token `2B`). Erkennt, ob die Karte zu einer fremden Klasse gehört. |
 | `normalizeNumber(raw)` | Räumt die Eingabe auf: Entfernt Präfixe wie `ID:` oder `2B-`, macht aus `3` die Nummer `03` und prüft, ob die Nummer zwischen 1 und 30 liegt. |
 | `executeCheckout(num)` | Legt einen neuen „Abgang" an (mit aktuellem Datum/Uhrzeit), spielt den hohen Ton, zeigt das gelbe Banner und speichert alles. |
 | `checkLongAbsence()` | Läuft alle 10 Sekunden mit. Prüft, ob ein Kind länger als `WARN_AFTER_MINUTES` unterwegs ist – dann ertönt **einmalig** der Warnton. |
 | `renderActiveList()` | Baut die „Aktuell auf Toilette"-Karten neu:elapsed Zeit, rote Färbung ab `OVERDUE_MINUTES`, Schaltfläche „Zurück". |
 | `renderHistoryTable()` | Baut die Tabelle des Tagesprotokolls: Abgang, Rückkehr, Dauer, Status. |
 | `renderQuickGrid()` / `updateQuickButtonsStatus()` | Erzeugt die 30 Tasten und markiert die Tasten der gerade abwesenden Kinder gelb pulsierend. |
-| `toggleCameraView()` | Startet die Kamera (`facingMode: "user"` = Frontkamera) oder stoppt sie. Bei Fehler (z. B. kein HTTPS) versucht sie die Rückkamera, dann eine Fehlermeldung. |
-| `openAdminSyncModal()` | Sammelt alle gespeicherten Gänge **gruppiert nach Datum**, wandelt sie in einen kompakten Text um (`V2;Klasse;JJJJMMTT:...`) und erzeugt daraus einen QR-Code auf dem Bildschirm. |
+| `toggleNumberPad()` | Klappt das Nummernfeld ein/aus – es ist standardmäßig ausgeblendet, damit Kinder nicht versehentlich tippen. |
+| `toggleCameraView()` | Startet die Kamera – bevorzugt `facingMode: "environment"` (hintere Kamera), Fallback `"user"` (Frontkamera) – oder stoppt sie. |
+| `openAdminSyncModal()` | Sammelt alle gespeicherten Gänge **gruppiert nach Datum**, wandelt sie in einen kompakten Text um (`V3;Schule;Klasse;JJJJMMTT:...`) und erzeugt daraus einen QR-Code auf dem Bildschirm. |
 | `runInvestigationFilter()` | Nimmt Start-/Endzeit entgegen und listet alle Nummern, deren Aufenthalt sich mit dem Zeitfenster überschneidet – der „Wer war wann draußen"-Filter. |
 | `confirmShredData()` | Setzt beide Listen zurück und löscht den Speicher-Eintrag komplett. |
 | `generateQrCards()` | Zeichnet 30 QR-Codes zweimal: klein für die Druckvorschau im Fenster, größer für den Druckbogen. |
@@ -355,6 +364,8 @@ Ganz oben im `<script>`-Block steht ein markierter Block `/* >>> HIER KANNST DU 
 | `TOTAL_STUDENTS` | `30` | Anzahl der Nummern (Tastenfeld & Druckkärtchen). |
 | `WARN_AFTER_MINUTES` | `5` | Ab wann der akustische Warnton ertönt (einmalig pro Gang). |
 | `OVERDUE_MINUTES` | `10` | Ab wann der rote „Bitte nachsehen!"-Hinweis erscheint. |
+| `SCHOOL_NAME` | `'GGS Steinberg'` | Schulname – erscheint im Header, auf dem Druckbogen und wird in den Admin-QR eingebettet. |
+| `ALLOWED_DOMAIN` | `'wcguard.schule.de'` | Domain-Sperre: Die App funktioniert nur auf dieser Domain (plus localhost, privaten IPs für Tests und `*.trycloudflare.com`). Auf fremden Domains erscheint nur ein Sperrhinweis – Kopierschutz. |
 
 Zusätzlich lässt sich die **Hintergrundfarbe** im `<style>`-Bereich ändern (Kommentar `/* --- HIER HINTERGRUNDFARBE ÄNDERN --- */`). Alle Werte sind schlichte Zahlen bzw. Farbwerte – einfach den Wert zwischen den Anführungszeichen/der Zuweisung ändern, speichern, auf den Server laden, fertig.
 
@@ -385,17 +396,19 @@ Ein typischer Eintrag in `school_toilet_sessions_v1` sieht so aus (JSON-Text):
 Der QR-Code auf dem Admin-Button ist kein normales Foto oder Video, sondern ein **komprimierter Text**. Er wird in `openAdminSyncModal()` so gebaut:
 
 ```
-V2;Klasse 2b;20261110:03:1014:1022#14:1110:9999;20261111:07:0905:0912
- │   │          │      │       │
- │   │          │      │       └─ Rückkehrzeit HHMM (9999 = noch draußen)
- │   │          │      └───────── Abgangszeit HHMM
- │   │          └──────────────── Schülernummer
- │   │   ┌─────────────────────────── Trennzeichen zwischen den Gängen (#)
- │   └───┴─────────────────────────── Datum JJJJMMTT + ":" (gilt für alle Gänge des Tages)
- └─────────────────────────────── Versionskennung V2 + Klassenname
+V3;Schule X;Klasse 2b;20261110:03:1014:1022#14:1110:9999;20261111:07:0905:0912
+ │   │        │          │      │       │
+ │   │        │          │      │       └─ Rückkehrzeit HHMM (9999 = noch draußen)
+ │   │        │          │      └───────── Abgangszeit HHMM
+ │   │        │          └──────────────── Schülernummer
+ │   │        │   ┌─────────────────────── Trennzeichen zwischen den Gängen (#)
+ │   │        └───┴─────────────────────── Datum JJJJMMTT + ":" (gilt für alle Gänge des Tages)
+ │   └──────────────────────────────────── Klassenname
+ └──────────────────────────────────────── Versionskennung V3 + Schulname
 ```
 
-* `V2` = Format-Version. `admin_sync.html` kann sowohl **V2** (mit Datum) als auch alte **V1**-Codes (nur Uhrzeit) lesen.
+* `V3` = Format-Version. `admin_sync.html` kann **V3** (Schule + Klasse + Datum), **V2** (Klasse + Datum) und alte **V1**-Codes (nur Uhrzeit) lesen.
+* Der Schulname ist fest eingebettet – er erscheint in der Admin-Übersicht als eigene Spalte und markiert die Daten als „eure" App.
 * Die Gänge sind **nach Datum gruppiert**: Pro Tag steht einmal `JJJJMMTT:`, gefolgt von den Gängen dieses Tages (`#`-getrennt). So bleibt der QR-Code auch über viele Tage klein und lesbar.
 * Jeder Gang ist `Nummer:Abgang:Ankunft` – bewusst ohne Namen.
 * `9999` als Ankunft bedeutet: Das Kind ist **noch draußen**.
@@ -405,11 +418,11 @@ V2;Klasse 2b;20261110:03:1014:1022#14:1110:9999;20261111:07:0905:0912
 
 Die zweite Datei ist bewusst **klein und einfach** gehalten:
 
-1. **Kamera-Scan:** Die Datei lädt `html5-qrcode` (Rückkamera) und liest den `V1;...`- oder `V2;...`-String vom Bildschirm des Klassen-iPads.
+1. **Kamera-Scan:** Die Datei lädt `html5-qrcode` (Rückkamera) und liest den `V1;...`-, `V2;...`- oder `V3;...`-String vom Bildschirm des Klassen-iPads.
 2. **Manueller Fallback:** Ein Textfeld akzeptiert denselben String per Einfügen – falls die Kamera z. B. am Mac kein QR lesen kann.
 3. **Parser `parsePayload()`:** Zerlegt den String an `;`, `#` und `:` in einzelne Datensätze (`Klasse`, `Datum`, `Nummer`, `Abgang`, `Ankunft`).
 4. **Merge mit Deduplizierung:** Jeder Vorgang bekommt einen Schlüssel `Klasse|Datum|Nummer|Abgang`. Scannt man dieselbe Klasse zweimal, entstehen **keine** Duplikate.
 5. **Speicherung:** Die gesammelten Daten liegen in `localStorage` unter `admin_sync_events_v1` – sie bleiben erhalten und können mit „Alles löschen" entfernt werden.
-6. **Anzeige:** Eine Tabelle sortiert nach **Datum**, Klasse und Uhrzeit zeigt Datum, Abgang, Rückkehr, berechnete Dauer (Std./Min.) und Status („Draußen" bei `9999`).
+6. **Anzeige:** Eine Tabelle sortiert nach **Datum**, Schule, Klasse und Uhrzeit zeigt Datum, Schule, Klasse, Abgang, Rückkehr, berechnete Dauer (Std./Min.) und Status („Draußen" bei `9999`).
 
 **Warum zwei Dateien?** Die Trennung ist bewusst: Das Klassen-iPad soll maximal einfach und klein sein (nur 30 Nummern, kein Synchronisations-Code). Die Schulleitung bekommt ein eigenes Werkzeug, das mehrere Klassen-QRs nacheinander einsammelt – ohne dass die Klassen-Terminals miteinander kommunizieren müssen.
