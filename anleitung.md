@@ -123,7 +123,7 @@ gespeichert und bleibt erhalten.
 
 **Tipp für die IT (optional):** Beim allerersten Öffnen kann die Klasse
 auch per URL vorgegeben werden, z. B.
-`https://wc.schule.de/toiletten_terminal.html?klasse=3a`
+`https://wc.schule.de/index.html?klasse=3a`
 Das ist praktisch für Jamf-Webclips: Die IT legt pro iPad eine eigene URL
 mit vorgegebenem Klassennamen an. Der Parameter gilt nur beim ersten
 Start – danach kann die Lehrkraft den Namen wie gewohnt per Klick ändern.
@@ -153,7 +153,7 @@ beliebigen QR-Scan-App gelesen und der Text in das Textfeld
 
 ### Die Einstellungen anpassen (für Neugierige)
 
-In `toiletten_terminal.html` gibt es zwei markierte Stellen:
+In `index.html` gibt es zwei markierte Stellen:
 
 | Stelle | Was ändert man? |
 | :--- | :--- |

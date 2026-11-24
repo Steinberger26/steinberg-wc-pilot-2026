@@ -13,7 +13,7 @@ Client-only Web-App ohne Backend. Zwei eigenständige HTML-Dateien plus statisch
 
 | Komponente | Datei | Zweck |
 | :--- | :--- | :--- |
-| Klassen-Terminal | `toiletten_terminal.html` | Scanner, Check-in/out-Logik, Töne, Druckbogen, Admin-Export |
+| Klassen-Terminal | `index.html` | Scanner, Check-in/out-Logik, Töne, Druckbogen, Admin-Export |
 | Admin-Ausleser | `admin_sync.html` | Parst Sammel-QRs, dedupliziert, zeigt Gesamtübersicht |
 | Offline-Cache | `sw.js` | Service Worker, Cache-first-Strategie |
 | App-Manifest | `manifest.webmanifest` | PWA-/Webclip-Integration (iPad) |
@@ -158,7 +158,7 @@ V3-Payload ≈ 60 Bytes Overhead + ~12 Bytes/Token. Bei 30 Kindern × 4 Gängen/
 Statische Site auf GitHub Pages (`<user>.github.io/<repo>/`). HTTPS automatisch (Let's Encrypt). `ALLOWED_DOMAIN` muss auf den GitHub-Usernamen gesetzt werden (`const ALLOWED_DOMAIN = '<user>.github.io'`).
 
 ### Jamf-Integration
-- **Webclip:** Pro iPad ein Webclip auf `https://<user>.github.io/<repo>/toiletten_terminal.html?klasse=<token>` – öffnet im Vollbild ohne Browserleiste.
+- **Webclip:** Pro iPad ein Webclip auf `https://<user>.github.io/<repo>/index.html?klasse=<token>` – öffnet im Vollbild ohne Browserleiste.
 - **Guided Access:** Single-App-Modus sperrt auf dem Webclip – keine Navigation, kein Home-Swipe, kein App-Wechsel.
 - **Einschränkungen:** Homebutton deaktiviert, Volume-Warnung aktiv, Zeitlimit optional.
 

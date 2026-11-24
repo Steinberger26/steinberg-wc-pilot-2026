@@ -17,7 +17,7 @@ const CACHE_NAME = 'kloguard-v4';
 // Diese Dateien werden beim ersten Start komplett gespeichert.
 const ASSETS = [
     './',
-    './toiletten_terminal.html',
+    './index.html',
     './admin_sync.html',
     './tailwind.js',
     './qrcode.min.js',
@@ -75,7 +75,7 @@ self.addEventListener('fetch', (event) => {
                     return response;
                 }).catch(() => {
                     // 3. Ganz ohne Netz: Fallback auf die Terminal-Seite
-                    return caches.match('./toiletten_terminal.html');
+                    return caches.match('./index.html');
                 });
             })
     );

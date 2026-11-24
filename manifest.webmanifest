@@ -2,7 +2,7 @@
     "name": "Toiletten-Pass",
     "short_name": "WC-Pass",
     "description": "Pseudonymes Toiletten-Abmeldesystem für Klassenzimmer",
-    "start_url": "./toiletten_terminal.html",
+    "start_url": "./",
     "scope": "./",
     "display": "standalone",
     "orientation": "any",

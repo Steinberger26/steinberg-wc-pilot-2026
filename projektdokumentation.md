@@ -28,7 +28,7 @@
 8. **Wie der Code funktioniert (Tutorial für Interessierte)**
    * 8.1 Die beiden Dateien und ihre Aufgaben
    * 8.2 Welche Sprache macht was?
-   * 8.3 Der Aufbau von `toiletten_terminal.html` Schritt für Schritt
+   * 8.3 Der Aufbau von `index.html` Schritt für Schritt
    * 8.4 Die wichtigsten JavaScript-Funktionen erklärt
    * 8.5 Die einstellbaren Konstanten (auch für Laien änderbar)
    * 8.6 Wie die Daten im Browser gespeichert werden
@@ -96,10 +96,10 @@ Am Nachmittag bewegen sich die Kinder oft frei zwischen Räumen. Hier wird keine
 
 ## 3. Was steckt technisch drin? (Programmiersprachen & Aufbau)
 
-Obwohl die App viele Aufgaben übernimmt (Kamera-Erkennung, Töne, Live-Timer, Druckvorschau, Schadensfilter), steckt die gesamte Programmierlogik des Terminals in **einer einzigen HTML-Datei: `toiletten_terminal.html`**. Das Projekt besteht aus **zwei selbst programmierten HTML-Dateien** – das Klassen-Terminal und `admin_sync.html` für die Schulleitung (liest die Sammel-QRs der Klassen aus). Daneben liegen nur noch **Bibliotheks-Dateien** (`tailwind.js`, `qrcode.min.js`, `html5-qrcode.min.js`), der **Offline-Cache** (`sw.js`), das **App-Manifest** (`manifest.webmanifest`) und `robots.txt` im selben Ordner – allesamt fertige, nicht selbst programmierte Bausteine.
+Obwohl die App viele Aufgaben übernimmt (Kamera-Erkennung, Töne, Live-Timer, Druckvorschau, Schadensfilter), steckt die gesamte Programmierlogik des Terminals in **einer einzigen HTML-Datei: `index.html`**. Das Projekt besteht aus **zwei selbst programmierten HTML-Dateien** – das Klassen-Terminal und `admin_sync.html` für die Schulleitung (liest die Sammel-QRs der Klassen aus). Daneben liegen nur noch **Bibliotheks-Dateien** (`tailwind.js`, `qrcode.min.js`, `html5-qrcode.min.js`), der **Offline-Cache** (`sw.js`), das **App-Manifest** (`manifest.webmanifest`) und `robots.txt` im selben Ordner – allesamt fertige, nicht selbst programmierte Bausteine.
 
 ### 3.1 Warum reicht je eine HTML-Datei pro Gerät?
-Moderne Web-Browser auf dem iPad (Safari) sind vollwertige Anwendungsplattformen. Eine HTML-Datei kann neben Text auch Gestaltungsvorschriften (CSS), Programmlogik (JavaScript), Töne und Bildverarbeitung direkt in sich vereinen. Es wird keine Installation aus dem Apple App Store benötigt und kein Datenbank-Server im Hintergrund. Das Terminal (`toiletten_terminal.html`) läuft auf **jedem** Klassen-iPad – derselbe File, aber jeder Browser speichert seine Daten getrennt (`localStorage`). Die zweite Datei (`admin_sync.html`) wird nur auf dem Gerät der Schulleitung geöffnet und dient ausschließlich dem Auslesen der optisch übertragenen Sammel-QRs.
+Moderne Web-Browser auf dem iPad (Safari) sind vollwertige Anwendungsplattformen. Eine HTML-Datei kann neben Text auch Gestaltungsvorschriften (CSS), Programmlogik (JavaScript), Töne und Bildverarbeitung direkt in sich vereinen. Es wird keine Installation aus dem Apple App Store benötigt und kein Datenbank-Server im Hintergrund. Das Terminal (`index.html`) läuft auf **jedem** Klassen-iPad – derselbe File, aber jeder Browser speichert seine Daten getrennt (`localStorage`). Die zweite Datei (`admin_sync.html`) wird nur auf dem Gerät der Schulleitung geöffnet und dient ausschließlich dem Auslesen der optisch übertragenen Sammel-QRs.
 
 ### 3.2 Eingesetzte Sprachen und Bibliotheken
 Alle verwendeten Technologien sind lizenzkostenfrei (Open Source) und erfordern keine Abonnements:
@@ -206,7 +206,7 @@ Die Einführung erfordert nur wenige Handgriffe und verursacht **0 € laufende 
 | SCHRITT 1: HOSTING                                                            |
 | Eine Subdomain anlegen (z. B. wc.ggssteinberg.de) oder einen Ordner /wc/      |
 | auf dem Schul-Webspace erstellen. ALLE Dateien des Ordners per FTP          |
-| hochladen: toiletten_terminal.html, admin_sync.html, tailwind.js,          |
+| hochladen: index.html, admin_sync.html, tailwind.js,          |
 | qrcode.min.js, html5-qrcode.min.js, sw.js, manifest.webmanifest.           |
 +-------------------------------------------------------------------------------+
                                        |
@@ -214,9 +214,9 @@ Die Einführung erfordert nur wenige Handgriffe und verursacht **0 € laufende 
 +-------------------------------------------------------------------------------+
 | SCHRITT 2: JAMF SCHOOL (MDM)                                                  |
 | Unter 'Apps -> Webclips' einen neuen Webclip anlegen:                         |
-| - URL: https://wc.ggssteinberg.de/toiletten_terminal.html                     |
+| - URL: https://wc.ggssteinberg.de/index.html                     |
 |   (Optional pro Klasse: ?klasse=2b anhängen, z. B.                           |
-|    .../toiletten_terminal.html?klasse=2b – legt den Klassennamen             |
+|    .../index.html?klasse=2b – legt den Klassennamen             |
 |    nur beim allerersten Start fest)                                          |
 | - Vollbildmodus: AKTIVIERT (keine Safari-Leiste sichtbar)                    |
 | - Ziel: Allen 8 Klassen-iPads zuweisen.                                       |
@@ -241,7 +241,7 @@ Gesundheit und Würde gehen immer vor. Das Kind darf sofort loslaufen. Die Lehrk
 Nein. Die App ist extrem schlank programmiert. Wenn das iPad an einem gewöhnlichen Ladekabel angeschlossen ist, bleibt der Akkustand den ganzen Tag bei 100 %.
 
 **Kann man die Hintergrundfarbe anpassen?**  
-Ja. In der Datei `toiletten_terminal.html` ist der Kommentar `/* --- HIER HINTERGRUNDFARBE ÄNDERN --- */` markiert. Dort kann der Farbcode (z. B. `#ffffff` für Weiß oder `#f8fafc` für Hellgrau) mit einem Texteditor frei gewählt werden.
+Ja. In der Datei `index.html` ist der Kommentar `/* --- HIER HINTERGRUNDFARBE ÄNDERN --- */` markiert. Dort kann der Farbcode (z. B. `#ffffff` für Weiß oder `#f8fafc` für Hellgrau) mit einem Texteditor frei gewählt werden.
 
 **Müssen wir bei jedem Schuljahreswechsel alles neu einrichten?**  
 Nein. Die iPads und die Web-Adresse bleiben identisch. Die neue Klasse druckt sich am ersten Schultag über den Button einfach einen neuen Satz Kärtchen aus – fertig.
@@ -256,7 +256,7 @@ Dieser Abschnitt erklärt die Technik so, dass auch Menschen ohne Programmierken
 
 | Datei | Wer benutzt sie? | Aufgabe |
 | :--- | :--- | :--- |
-| **`toiletten_terminal.html`** | Lehrkraft / iPad im Klassenzimmer | Das eigentliche Terminal: scannen, buchen, anzeigen, drucken, filtern, schreddern. |
+| **`index.html`** | Lehrkraft / iPad im Klassenzimmer | Das eigentliche Terminal: scannen, buchen, anzeigen, drucken, filtern, schreddern. |
 | **`admin_sync.html`** | Schulleitung / IT auf einem anderen Gerät | Liest den Sammel-QR der Klassen-Terminals aus und zeigt eine Gesamtübersicht. |
 | **`tailwind.js`, `qrcode.min.js`, `html5-qrcode.min.js`** | (automatisch geladen) | Fertige Open-Source-Bibliotheken – bewusst **lokal** gespeichert, damit die App auch ohne Internet funktioniert. |
 | **`sw.js`** | (automatisch im Hintergrund) | Service Worker: Cached alle Dateien im Gerät, damit die App ab dem zweiten Laden komplett offline läuft. |
@@ -282,7 +282,7 @@ Eine HTML-Datei ist wie ein Brief mit drei Umschlägen. Jeder Umschlag hat eine 
 
 **Wichtig zu wissen:** Alle Bibliotheken liegen **lokal auf dem Schulserver** (keine externen CDNs). Das iPad braucht Internet also nur beim **allerersten Öffnen**. Danach legt der Service Worker (`sw.js`) alles im Gerätespeicher ab – die App läuft ab dann **auch bei komplettem WLAN-Ausfall** weiter. Tipp für die Bereitstellung: Jedes iPad einmalig mit Netz öffnen, dann ist es für immer offline-tauglich.
 
-### 8.3 Der Aufbau von `toiletten_terminal.html` Schritt für Schritt
+### 8.3 Der Aufbau von `index.html` Schritt für Schritt
 
 Die Datei ist von oben nach unten in vier klar getrennte Zonen aufgeteilt:
 

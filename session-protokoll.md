@@ -14,7 +14,7 @@ dem anderen PC den ganzen Ordner kopieren!):
 
 | Datei | Zweck |
 |---|---|
-| `toiletten_terminal.html` | Haupt-App (Klassen-Terminal) |
+| `index.html` | Haupt-App (Klassen-Terminal) |
 | `admin_sync.html` | Admin-Ausleser für Sammel-QRs |
 | `tailwind.js` | Design-Bibliothek (lokal, 407 KB) |
 | `qrcode.min.js` | QR-Code-Zeichner (lokal) |
@@ -79,7 +79,7 @@ dem anderen PC den ganzen Ordner kopieren!):
 SSL aktivierbar). **Noch nicht live** – Dateien noch nicht hochgeladen.
 
 **Offene Punkte:**
-1. **`ALLOWED_DOMAIN`** in `toiletten_terminal.html` UND `admin_sync.html`
+1. **`ALLOWED_DOMAIN`** in `index.html` UND `admin_sync.html`
    auf die echte Domain setzen (aktuell Platzhalter `wcguard.schule.de`;
    Hosting ist jetzt **GitHub Pages** → z. B. `max-mustermann.github.io`),
    optional `schul-logo.png` ablegen
@@ -132,7 +132,7 @@ SSL aktivierbar). **Noch nicht live** – Dateien noch nicht hochgeladen.
    + 3 Markdown-Doku-Dateien)
 2. **Markdown-Dateien zuerst lesen:** `projektdokumentation.md` (§8 =
    Code-Tutorial), `ideen.md` (Backlog), dieses Protokoll
-3. **HTML-Dateien:** `toiletten_terminal.html` (Haupt-App, ~1240 Zeilen),
+3. **HTML-Dateien:** `index.html` (Haupt-App, ~1240 Zeilen),
    `admin_sync.html` (~380 Zeilen)
 4. **Nächster Schritt:** FCHosting-Subdomain anlegen + Dateien hochladen
    ODER erst lokal testen (`python -m http.server 8000`)
