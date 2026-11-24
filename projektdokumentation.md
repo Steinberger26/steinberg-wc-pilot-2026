@@ -365,7 +365,7 @@ Ganz oben im `<script>`-Block steht ein markierter Block `/* >>> HIER KANNST DU 
 | `WARN_AFTER_MINUTES` | `5` | Ab wann der akustische Warnton ertönt (einmalig pro Gang). |
 | `OVERDUE_MINUTES` | `10` | Ab wann der rote „Bitte nachsehen!"-Hinweis erscheint. |
 | `SCHOOL_NAME` | `'GGS Steinberg'` | Schulname – erscheint im Header, auf dem Druckbogen und wird in den Admin-QR eingebettet. |
-| `ALLOWED_DOMAIN` | `'wcguard.schule.de'` | Domain-Sperre: Die App funktioniert nur auf dieser Domain (plus localhost, privaten IPs für Tests und `*.trycloudflare.com`). Auf fremden Domains erscheint nur ein Sperrhinweis – Kopierschutz. |
+| `ALLOWED_DOMAIN` | `'steinberger26.github.io'` | Domain-Sperre: Die App funktioniert nur auf dieser Domain (plus localhost, privaten IPs für Tests und `*.trycloudflare.com`). Auf fremden Domains erscheint nur ein Sperrhinweis – Kopierschutz. |
 
 Zusätzlich lässt sich die **Hintergrundfarbe** im `<style>`-Bereich ändern (Kommentar `/* --- HIER HINTERGRUNDFARBE ÄNDERN --- */`). Alle Werte sind schlichte Zahlen bzw. Farbwerte – einfach den Wert zwischen den Anführungszeichen/der Zuweisung ändern, speichern, auf den Server laden, fertig.
 
