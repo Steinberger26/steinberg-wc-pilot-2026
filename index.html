@@ -530,7 +530,7 @@
             const urlClass = new URLSearchParams(window.location.search).get('klasse');
             // " ; " und "#" rausnehmen, damit der QR-Payload nicht
             // versehentlich Felder zerlegt (gleich wie beim manuellen Ändern).
-            currentClass = ((urlClass || 'Klasse 2b').replace(/[;#]/g, '')) || 'Klasse 2b';
+            currentClass = ((urlClass || 'Tigerklasse').replace(/[;#]/g, '')) || 'Klasse 2b';
             localStorage.setItem(CLASS_KEY, currentClass);
         }
         let activeSessions = [];
