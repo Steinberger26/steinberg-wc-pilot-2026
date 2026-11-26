@@ -12,7 +12,7 @@
 
 // Versionsname: Bei jeder Änderung an den Dateien hier hochzählen
 // (z. B. v1 → v2), damit alte Caches automatisch ersetzt werden.
-const CACHE_NAME = 'kloguard-v4';
+const CACHE_NAME = 'kloguard-v6';
 
 // Diese Dateien werden beim ersten Start komplett gespeichert.
 const ASSETS = [

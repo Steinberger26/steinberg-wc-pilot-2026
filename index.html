@@ -243,9 +243,14 @@
                         </span>
                         <h2 class="text-base font-bold text-slate-900">Aktuell auf Toilette</h2>
                     </div>
-                    <span id="active-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600">
-                        0 Kinder unterwegs
-                    </span>
+                    <div class="flex items-center gap-2">
+                        <button onclick="returnAllActive()" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border border-emerald-300 transition-colors cursor-pointer" title="Notfall: Alle aktuell draußen markierten Kinder als zurückgemeldet erfassen">
+                            Alle zurück
+                        </button>
+                        <span id="active-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-600">
+                            0 Kinder unterwegs
+                        </span>
+                    </div>
                 </div>
 
                 <!-- Liste der aktuell Abwesenden -->
@@ -262,7 +267,7 @@
             <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 flex-1 flex flex-col">
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                     <div>
-                        <h2 class="text-sm font-bold text-slate-900">Heutiges Verlaufsprotokoll</h2>
+                        <h2 class="text-sm font-bold text-slate-900">Verlaufsprotokoll</h2>
                         <p class="text-xs text-slate-500" id="current-date-display">Heute</p>
                     </div>
                     <div class="flex items-center gap-2">
@@ -275,6 +280,7 @@
                     <table class="w-full text-left text-xs text-slate-600">
                         <thead class="bg-slate-50 text-slate-500 font-semibold sticky top-0 border-b border-slate-100">
                             <tr>
+                                <th class="py-2.5 px-3">Datum</th>
                                 <th class="py-2.5 px-3">Nummer</th>
                                 <th class="py-2.5 px-3">Verlassen</th>
                                 <th class="py-2.5 px-3">Rückkehr</th>
@@ -287,7 +293,7 @@
                         </tbody>
                     </table>
                     <div id="history-empty-state" class="text-center py-8 text-slate-400">
-                        <p class="text-xs">Noch keine Toilettengänge heute registriert.</p>
+                        <p class="text-xs">Noch keine Toilettengänge registriert.</p>
                     </div>
                 </div>
 
@@ -321,7 +327,7 @@
             </p>
 
             <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 inline-block mb-3">
-                <div id="admin-qr-box" class="flex justify-center items-center min-w-[200px] min-h-[200px]"></div>
+                <div id="admin-qr-box" class="flex justify-center items-center min-w-[280px] min-h-[280px]"></div>
             </div>
 
             <div class="text-xs font-semibold text-slate-500 mb-4" id="admin-qr-status">
@@ -514,9 +520,20 @@
         //  OVERDUE_MINUTES:
         //  Ab wie vielen Minuten der rote Hinweis "Bitte nachsehen!"
         //  in der Liste erscheint.
+        //
+        //  CRITICAL_MINUTES:
+        //  Ab wie vielen Minuten der laute Alarm-Ton ertönt
+        //  (zweite Warnstufe, standardmäßig 15 Minuten).
         // ============================================================
         const WARN_AFTER_MINUTES = 5;
         const OVERDUE_MINUTES = 10;
+
+        // CRITICAL_MINUTES:
+        // Ab wie vielen Minuten der zweite, deutlichere Warn-Ton
+        // ertönt (zweistufiges System: 5 Min. leiser Hinweis,
+        // 10 Min. roter Kasten, 15 Min. lauter Alarm-Ton).
+        // Die Zahl einfach ändern, z. B. auf 12 oder 20.
+        const CRITICAL_MINUTES = 15;
 
         // Klassenname: Zuerst den am Gerät gespeicherten Namen nehmen.
         // Ist noch keiner gespeichert (allererster Start), kann die IT
@@ -573,13 +590,36 @@
                     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
                     osc.start(now);
                     osc.stop(now + 0.18);
-                } else {
+                } else if (type === 'warn') {
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(220, now);
                     gain.gain.setValueAtTime(0.2, now);
                     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
                     osc.start(now);
                     osc.stop(now + 0.25);
+                } else if (type === 'critical') {
+                    // Kritischer Alarm: zwei absteigende Sägezahn-Töne,
+                    // deutlich lauter und länger als der normale Warn-Ton.
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.exponentialRampToValueAtTime(220, now + 0.2);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.setValueAtTime(0.25, now + 0.35);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
+                    osc.start(now);
+                    osc.stop(now + 0.45);
+                    // Zweiter Piepton kurz danach
+                    const osc2 = audioCtx.createOscillator();
+                    const gain2 = audioCtx.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(audioCtx.destination);
+                    osc2.type = 'sawtooth';
+                    osc2.frequency.setValueAtTime(440, now + 0.5);
+                    osc2.frequency.exponentialRampToValueAtTime(220, now + 0.7);
+                    gain2.gain.setValueAtTime(0.25, now + 0.5);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.75);
+                    osc2.start(now + 0.5);
+                    osc2.stop(now + 0.75);
                 }
             } catch (e) {}
         }
@@ -886,6 +926,39 @@
             }
         }
 
+        // -------------------------------------------------------------
+        // „ALLE ZURÜCK" – Notfallfunktion
+        // Beendet alle aktiven Sitzungen auf einmal (z. B. wenn das
+        // iPad neu gestartet wurde und Kinder "draußen" hängen blieben
+        // oder am Tagesende alle zurück sind).
+        // -------------------------------------------------------------
+        function returnAllActive() {
+            if (activeSessions.length === 0) return;
+            const n = activeSessions.length;
+            if (!confirm(`${n} Kind(er) als zurückgemeldet markieren?\n\nDies beendet alle laufenden Toilettengänge sofort.`)) {
+                return;
+            }
+            const now = new Date();
+            activeSessions.forEach(s => {
+                completedSessions.unshift({
+                    id: s.id,
+                    number: s.number,
+                    checkoutTime: s.checkoutTime,
+                    checkinTime: now,
+                    durationMinutes: Math.round((now - new Date(s.checkoutTime)) / 60000)
+                });
+            });
+            activeSessions = [];
+            playScanBeep('in');
+            showFeedback(
+                'checkin',
+                `${n} Nummer(n) zurückgemeldet`,
+                'Alle laufenden Toilettengänge wurden beendet.'
+            );
+            saveToStorage();
+            renderAll();
+        }
+
         function cancelPendingCheckout() {
             document.getElementById('modal-teacher-confirm').classList.add('hidden');
             if (pendingCheckoutNumber) {
@@ -1040,11 +1113,12 @@
             activeSessions.forEach(session => {
                 const elapsedMinutes = Math.floor((now - session.checkoutTime) / 60000);
                 const isOverdue = elapsedMinutes >= OVERDUE_MINUTES;
+                const isCritical = elapsedMinutes >= CRITICAL_MINUTES;
 
                 html += `
-                    <div class="flex items-center justify-between p-3.5 rounded-xl border ${isOverdue ? 'bg-rose-50/70 border-rose-200' : 'bg-amber-50/60 border-amber-200'} transition-all shadow-xs">
+                    <div class="flex items-center justify-between p-3.5 rounded-xl border ${isCritical ? 'bg-rose-100/80 border-rose-400' : isOverdue ? 'bg-rose-50/70 border-rose-200' : 'bg-amber-50/60 border-amber-200'} transition-all shadow-xs">
                         <div class="flex items-center gap-3">
-                            <div class="h-10 w-10 rounded-lg ${isOverdue ? 'bg-rose-600' : 'bg-amber-600'} text-white font-mono font-bold text-lg flex items-center justify-center shadow-xs">
+                            <div class="h-10 w-10 rounded-lg ${isCritical ? 'bg-rose-700' : isOverdue ? 'bg-rose-600' : 'bg-amber-600'} text-white font-mono font-bold text-lg flex items-center justify-center shadow-xs">
                                 ${session.number}
                             </div>
                             <div>
@@ -1053,11 +1127,11 @@
                                     <span class="text-[10px] text-slate-500 font-mono">Abgang: ${formatTime(session.checkoutTime)}</span>
                                 </div>
                                 <div class="flex items-center gap-1.5 mt-0.5">
-                                    <span class="inline-block w-2 h-2 rounded-full ${isOverdue ? 'bg-rose-500 animate-ping' : 'bg-amber-500'}"></span>
-                                    <span class="text-xs font-bold ${isOverdue ? 'text-rose-700' : 'text-amber-800'}">
+                                    <span class="inline-block w-2 h-2 rounded-full ${isCritical ? 'bg-rose-600 animate-ping' : isOverdue ? 'bg-rose-500 animate-ping' : 'bg-amber-500'}"></span>
+                                    <span class="text-xs font-bold ${isCritical ? 'text-rose-800' : isOverdue ? 'text-rose-700' : 'text-amber-800'}">
                                         Seit ${elapsedMinutes} Min. unterwegs
                                     </span>
-                                    ${isOverdue ? '<span class="text-[10px] font-bold text-rose-700 bg-rose-100 px-1.5 py-0.5 rounded">Bitte nachsehen!</span>' : ''}
+                                    ${isCritical ? '<span class="text-[10px] font-bold text-white bg-rose-700 px-1.5 py-0.5 rounded animate-pulse">⚠ Dringend nachsehen!</span>' : isOverdue ? '<span class="text-[10px] font-bold text-rose-700 bg-rose-100 px-1.5 py-0.5 rounded">Bitte nachsehen!</span>' : ''}
                                 </div>
                             </div>
                         </div>
@@ -1093,6 +1167,7 @@
             activeSessions.forEach(s => {
                 rows += `
                     <tr class="bg-amber-50/40">
+                        <td class="py-2.5 px-3 font-mono text-slate-500 whitespace-nowrap">${formatDate(s.checkoutTime)}</td>
                         <td class="py-2.5 px-3 font-mono font-bold text-slate-900">${s.number}</td>
                         <td class="py-2.5 px-3 font-mono text-slate-600">${formatTime(s.checkoutTime)}</td>
                         <td class="py-2.5 px-3 text-slate-400 italic">--:--:--</td>
@@ -1107,6 +1182,7 @@
             completedSessions.forEach(s => {
                 rows += `
                     <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="py-2.5 px-3 font-mono text-slate-500 whitespace-nowrap">${formatDate(s.checkoutTime)}</td>
                         <td class="py-2.5 px-3 font-mono font-bold text-slate-700">${s.number}</td>
                         <td class="py-2.5 px-3 font-mono text-slate-500">${formatTime(s.checkoutTime)}</td>
                         <td class="py-2.5 px-3 font-mono text-slate-500">${formatTime(s.checkinTime)}</td>
@@ -1191,6 +1267,14 @@
                     changed = true;
                     playScanBeep('warn');
                 }
+
+                // Zweite Stufe: Bei CRITICAL_MINUTES ertönt ein
+                // deutlich lauterer Alarm-Ton (zweimalig).
+                if (!session.criticalWarned && elapsedMin >= CRITICAL_MINUTES) {
+                    session.criticalWarned = true;
+                    changed = true;
+                    playScanBeep('critical');
+                }
             });
 
             // Merkmal "Ton schon gespielt" sichern, damit der
@@ -1214,6 +1298,15 @@
             if (!dateObj) return '';
             const d = new Date(dateObj);
             return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+        }
+
+        // Datum kurz für die Tabelle: TT.MM. (z. B. 25.11.)
+        // Wird pro Zeile aus dem Abgangszeitpunkt gebildet,
+        // damit Mehrtag-Daten (= keine Auto-Löschung) lesbar bleiben.
+        function formatDate(dateObj) {
+            if (!dateObj) return '';
+            const d = new Date(dateObj);
+            return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.`;
         }
 
         // -------------------------------------------------------------
@@ -1326,8 +1419,8 @@
 
             new QRCode(box, {
                 text: payload,
-                width: 200,
-                height: 200,
+                width: 280,
+                height: 280,
                 colorDark: "#0f172a",
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.M
